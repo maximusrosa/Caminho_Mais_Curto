@@ -1,90 +1,107 @@
-// Program to find Dijkstra's shortest path using STL set in C++.
-// Code based on:
-// https://github.com/CoffeeBeforeArch/cpp_data_structures/blob/master/algorithms/graph_algorithms/dijkstra/dijkstra.cpp
-
-#include <bits/stdc++.h>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <limits>
+#include "min_heap.hpp"
+#define INF numeric_limits<int>::max()
 using namespace std;
-#define INF 0xC0FFEE
 
-// This class represents a directed graph using 
-// adjacency list representation
 class Graph {
 private:
-    int V; // No. of vertices
-
-    // In a weighted graph, we need to store vertex 
-    // and weight pair for every edge
-    vector<vector<pair<int, int>>> adj;
+    int numVertices;
+    vector<vector<pair<int, int>>> adjVector; // Adjacency list {neighbor, weight}
 
 public:
-    Graph(int v); // Constructor
+    // Default constructor
+    Graph(int v) : numVertices(v), adjVector(v) {}
 
-    // function to add an edge to graph
-    void addEdge(int u, int v, int w);
+    /* Constructors based on code by Marcus Ritt */
+    /*          <mrpritt@inf.ufrgs.br>          */
 
-    // returns the neighbors of a vertex
-    const vector<pair<int, int>>& getNeighbors(int v) const {
-        return adj[v];
-    }
+    // Alternative constructor to read from DIMACS format
+    Graph(istream& in) {
+        string line, dummy;
+        unsigned n, m;
 
-    // prints shortest path from s
-    void shortestPath(int s);
-};
+        // Skip comments and find "p sp"
+        while (getline(in, line) && line.substr(0, 4) != "p sp");
 
-// Allocates memory for adjacency list
-Graph::Graph(int v) {
-    this->V = v;
-    adj.resize(V);
-}
+        // Read number of vertices and edges
+        stringstream linestr(line);
+        linestr >> dummy >> dummy >> n >> m;
 
-void Graph::addEdge(int u, int v, int w) {
-    adj[u].push_back(make_pair(v, w));
-    adj[v].push_back(make_pair(u, w));
-}
+        numVertices = n;
+        adjVector.resize(n);
 
-// Prints shortest paths from src to all other vertices
-void Graph::shortestPath(int src) {
-    // Create a set to store vertices that are being processed
-    set<pair<int, int>> setds;
-
-    // Create a vector for distances and initialize all distances as infinite (INF)
-    vector<int> dist(V, INF);
-
-    // Insert source itself in Set and initialize its distance as 0.
-    setds.insert(make_pair(0, src));
-    dist[src] = 0;
-
-    // Looping till all shortest distance are finalized then setds will become empty
-    while (!setds.empty()) {
-        // The first vertex in Set is the minimum distance vertex, extract it from set.
-        pair<int, int> tmp = *(setds.begin());
-        setds.erase(setds.begin());
-
-        // vertex label is stored in second of pair (it has to be done this way to keep the vertices sorted distance (distance must be first item in pair)
-        int u = tmp.second;
-
-        // 'i' is used to get all adjacent vertices of a vertex
-        for (auto i = adj[u].begin(); i != adj[u].end(); ++i) {
-            // Get vertex label and weight of current adjacent of u.
-            int v = (*i).first;
-            int weight = (*i).second;
-
-            // If there is shorter path to v through u.
-            if (dist[v] > dist[u] + weight) {
-                // If distance of v is not INF then it must be in our set, so removing it and inserting again with updated less distance.
-                // Note: We extract only those vertices from Set for which distance is finalized. So for them, we would never reach here.
-                if (dist[v] != INF)
-                    setds.erase(setds.find(make_pair(dist[v], v)));
-
-                // Updating distance of v
-                dist[v] = dist[u] + weight;
-                setds.insert(make_pair(dist[v], v));
+        // Read edges
+        for (unsigned i = 0; i < m; i++) {
+            getline(in, line);
+            if (line.substr(0, 2) == "a ") {
+                stringstream arc(line);
+                unsigned u, v, w;
+                char ac;
+                arc >> ac >> u >> v >> w;
+                u--; v--; // Convert to 0-indexed
+                addEdge(u, v, w);
             }
         }
     }
 
-    // Print shortest distances stored in dist[]
-    printf("Vertex Distance from Source\n");
-    for (int i = 0; i < V; ++i)
-        printf("%d \t\t %d\n", i, dist[i]);
-}
+    // Random graph constructor
+    Graph (unsigned n, double p, int maxWeight) {
+        srand(time(nullptr)); // Seed for random numbers
+
+        for (unsigned i = 0; i < n; i++) {
+            for (unsigned j = 0; j < n; j++) {
+                if (i != j && (rand() / (double)RAND_MAX) < p) {
+                    addEdge(i, j, rand() % maxWeight + 1); // Weight in the range [1, maxWeight]
+                }
+            }
+        }
+    }
+
+    /*--------------------------------------------*/
+
+    void addEdge(int u, int v, int w) {
+        adjVector[u].push_back({v, w});
+        //adjVector[v].push_back({u, w}); // Uncomment for directed graph
+    }
+
+    void printGraph() {
+        for (int i = 0; i < numVertices; i++) {
+            cout << "Vertex " << i + 1 << " -> ";
+            for (const auto& [v, w] : adjVector[i]) {
+                cout << "(" << v + 1 << ", " << w << ") ";
+            }
+            cout << "\n";
+        }
+    }
+
+    void shortestPath(int src, int k) {
+        MinHeap minHeap(k); // Using k-ary heap
+
+        vector<int> dist(numVertices, INF);
+        dist[src] = 0;
+        minHeap.insert({src, 0}); // {vertex, distance}
+
+        while (!minHeap.isEmpty()) {
+            auto [uDist, u] = minHeap.extractMin();
+
+            for (auto [v, weight] : adjVector[u]) {
+                if (dist[v] > uDist + weight) {
+                    dist[v] = uDist + weight;
+                    minHeap.insert({dist[v], v});
+                }
+            }
+        }
+
+        // Print shortest distances
+        cout << "Vertex\tDistance from Source\n";
+        for (int i = 0; i < numVertices; ++i)
+            if (dist[i] == INF)
+                cout << i << "\t\tINF\n";
+            else
+                cout << i << "\t\t" << dist[i] << "\n";
+    }
+};
