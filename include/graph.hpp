@@ -78,30 +78,11 @@ public:
         }
     }
 
-    void shortestPath(int src, int k) {
-        MinHeap minHeap(k); // Using k-ary heap
+    const int getNumVertices() const {
+        return numVertices;
+    }
 
-        vector<int> dist(numVertices, INF);
-        dist[src] = 0;
-        minHeap.insert({src, 0}); // {vertex, distance}
-
-        while (!minHeap.isEmpty()) {
-            auto [uDist, u] = minHeap.extractMin();
-
-            for (auto [v, weight] : adjVector[u]) {
-                if (dist[v] > uDist + weight) {
-                    dist[v] = uDist + weight;
-                    minHeap.insert({dist[v], v});
-                }
-            }
-        }
-
-        // Print shortest distances
-        cout << "Vertex\tDistance from Source\n";
-        for (int i = 0; i < numVertices; ++i)
-            if (dist[i] == INF)
-                cout << i << "\t\tINF\n";
-            else
-                cout << i << "\t\t" << dist[i] << "\n";
+    const vector<pair<int, int>> &getAdjList(int u) const {
+        return adjVector[u];
     }
 };
