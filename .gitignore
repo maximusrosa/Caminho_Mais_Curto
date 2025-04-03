@@ -1,3 +1,8 @@
 /cmake-build-debug
 *.iml
 *.xml
+files/USA-road-d.E.gr
+files/USA-road-d.NE.gr
+files/USA-road-d.NW.gr
+files/USA-road-d.USA.gr
+files/USA-road-d.W.gr
