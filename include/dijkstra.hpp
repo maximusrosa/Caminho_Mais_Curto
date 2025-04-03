@@ -15,7 +15,7 @@ class Dijkstra {
     
             int numVertices = g.getNumVertices();
             vector<int> dist(numVertices, INF);
-            MinHeap minHeap(numVertices, k);
+            MinHeap minHeap(k);
     
             dist[startVertex] = 0;
             update_operations++;
@@ -52,7 +52,7 @@ class Dijkstra {
                     cout << i << "\t\tINF\n";
                 else
                     cout << i << "\t\t" << dist[i] << "\n";
-        
+*/       
 
             cout << "\nOperations:\n";
             cout << "Insert: " << insert_operations << endl;
@@ -60,6 +60,6 @@ class Dijkstra {
             cout << "Update: " << update_operations << endl;
             cout << "Sift up: " << MinHeap::sift_up_operations << endl;
             cout << "Sift down: " << MinHeap::sift_down_operations << endl;
-*/
+
         }
     };

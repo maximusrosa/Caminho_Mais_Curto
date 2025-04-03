@@ -9,8 +9,8 @@ class MinHeap {
     private:
         int k; // Number of children per node
         vector<pair<int, int>> heap; // {vertex, distance}
-        vector<int> position; // Maps vertex to its index in the heap
-
+        unordered_map<int, int> position; // Maps the vertice -> heap index
+    
         int parent(int i) { return (i - 1) / k; }
         int child(int i, int j) { return k * i + (j + 1); }
     
@@ -62,7 +62,7 @@ class MinHeap {
         static int sift_up_operations;
         static int sift_down_operations;
 
-        MinHeap(int numVertices, int k) : k(k), position(numVertices, -1) {}
+        MinHeap(int k) : k(k) {}
     
         bool isEmpty() { return heap.empty(); }
     
@@ -78,7 +78,7 @@ class MinHeap {
             if (heap.empty()) throw runtime_error("Heap is empty");
     
             pair<int, int> minVal = heap[0];
-            position[minVal.first] = -1; // Remove vertex from position map
+            position.erase(minVal.first); // Remove from position map
 
             if (heap.size() > 1){
                 heap[0] = heap.back();
@@ -92,11 +92,11 @@ class MinHeap {
         }
 
         bool contains(int vertex) {
-            return position[vertex] != -1; // Check if vertex is in the heap
+            return position.find(vertex) != position.end();
         }
 
         void decreaseKey(int newDist, int vertex) {
-            if (position[vertex] != -1) return; // If vertex not in heap, do nothing
+            if (position.find(vertex) == position.end()) return; // If vertex not in heap, do nothing
     
             int index = position[vertex];
             if (heap[index].second > newDist) {
