@@ -45,14 +45,14 @@ class Dijkstra {
                 }
             }
         
-/*    
+   
             cout << "Vertex\tDistance from Source (" << startVertex << ")\n";
             for (int i = 0; i < numVertices; ++i)
                 if (dist[i] == INF)
                     cout << i << "\t\tINF\n";
                 else
                     cout << i << "\t\t" << dist[i] << "\n";
-*/        
+       
 
             cout << "\nOperations:\n";
             cout << "Insert: " << insert_operations << endl;
