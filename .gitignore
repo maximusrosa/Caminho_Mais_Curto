@@ -6,3 +6,6 @@ files/USA-road-d.NE.gr
 files/USA-road-d.NW.gr
 files/USA-road-d.USA.gr
 files/USA-road-d.W.gr
+*.csv
+*.dimacs
+*.gr

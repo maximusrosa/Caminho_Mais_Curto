@@ -1,0 +1,134 @@
+\documentclass{iiufrgs}
+\usepackage[latin1]{inputenc}   % pacote para acentuação
+\usepackage{graphicx}           % pacote para importar figuras
+\usepackage{times}              % pacote para usar fonte Adobe Times
+\usepackage{framed}             % para exemplos e TODOs
+\usepackage{biblatex}           % para referências bibliográficas
+\usepackage{xcolor}             % cores
+\usepackage{hyperref}           % referências
+\usepackage{amsmath}
+
+\colorlet{shadecolor}{orange!15}
+
+\title{Laboratório 1}
+\author{}{J. Rapidez}
+
+\addbibresource{r.bib}
+
+\begin{document}
+\maketitle
+
+\setcounter{chapter}{1}
+
+\section{Tarefa}
+Implementar o algoritmo de X, que permite calcular um Y em tempo $O(T(n))$. Validar experimentalmente que o
+desempenho é $O(T(n))$. Determinar a constante de proporcionalidade $c$, tal que o tempo é $c \log n$.
+
+\section{Solução}
+Implementei o algoritmo de X usando uma estrutura da dados Y. Um
+problema particular na solução foi fazer Z, que resolvemos fazendo W.
+
+\begin{shaded}
+  Não existem restrições para a forma da solução: a escolha de estruturas de dado, por exemplo, e
+  livre. Qualquer linguagem de programação que possui uma implementação (compilador, interpretador) em
+  software livre, disponível para um Ubuntu Linux é admissível.
+\end{shaded}
+
+\section{Ambiente de teste}
+
+Os resultados foram obtidos numa Cray X-MP, com $24$ processadores de
+$200$ MHz, e $256$ GB de RAM. Testamos com dados gerados
+randomicamente de tamanho $n=2,4,8,\ldots,2^{12}$. Cada teste foi
+repetido $20$ vezes.
+
+\section{Resultados}
+
+\begin{shaded}
+  Dicas para avaliar o tempo:
+  \begin{itemize}
+  \item Sempre se for possível, não medir o tempo de uma execução de uma única operação ou execução, mas de
+    várias, e relatar o tempo médio. Uma diretiva simples é não medir tempo menor que $1$s.
+  \item Pode ser difícil comparar visualmente um gráfico de medidas com o tempo teórico esperado. Uma maneira
+    para facilitar a comparação é dividir o tempo observado $T_o(n)$ pelo tempo esperado $T(n)$. Para
+    $n\rightarrow\infty$ a curve deve se aproximar a uma constante.
+  \item Uma outra abordagem com um modelo genérico: A complexidade de tempo de um algoritmo prático com alta
+    probabilidade possui a forma
+    \begin{align*}
+      T(n)\sim ab^nn^c \log^d n
+    \end{align*}
+    (ver p.ex.~\textcite[cáp.~1.4]{Sedgewick.Wayne/2011} e \textcite{Sedgewick/2011}). Frequentemente podemos
+    focar em dois casos simples. Para uma série de medidas $(n,T)$ podemos avaliar
+    \begin{description}
+    \item[uma hipótese exponencial] Com $T(n)\sim ab^n$, obtemos $\log T\sim \log a+n\log b$. Logo podemos
+      determinar um modelo por regressão linear entre $\log T$ e $n$;
+    \item[uma hipótese polinomial] Com $T(n)\sim an^b$ obtemos $\log T\sim \log a+b\log n$. Logo podemos
+      determinar um modelo por regressão linear entre $\log T$ e $\log n$.
+    \end{description}
+  \end{itemize}
+\end{shaded}
+
+A Tabela~\ref{tab1} mostra o tempo de execução do algoritmo de Dijkstra para um grafo com $n=2^i$,
+$i=2,\ldots,12$ vértices é $\approx 0.6n^2$ arestas. Usando uma hipótese linear obtemos $a=54\mathrm{ns}$ e
+$b\approx 1.65$. A complexidade pessimista teórica é $(n+m)\log n=(0.6n^2+n)\log n$.
+
+\begin{table}
+  \centering
+  \begin{tabular}{rrrrrrrrrrrrrr}
+    \hline
+    n =             & 2     & 4      & 8       & 16      & 32       & 64        \\
+    $T_o$ [$\mu s$] & 0.77  & 0.87   & 1.19    & 2.36    & 7.57     & 27.91     \\
+    \hline
+    n =             & 128   & 256    & 512     & 1024    & 2048     & 4096      \\
+    $T_o$ [$\mu s$] & 92.52 & 336.13 & 1434.72 & 6024.10 & 24390.20 & 100000.00 \\
+    \hline
+  \end{tabular}
+  \caption{Tempo de execução $T_o$ do algoritmo de Dijkstra para um grafo com
+    $n=2^i$, $i=2,\ldots,12$ vértices é $\approx 0.6n^2$ arestas.}
+  \label{tab1}
+\end{table}
+
+\begin{shaded}
+  Dicas:
+  \begin{itemize}
+  \item Alinhar colunas numéricas sempre à direita.
+  \item Informar quantidades com um número de dígitos razoável e arredondar corretamente.
+  \end{itemize}
+\end{shaded}
+
+O tempo de execução dividido pelo tempo esperado é mostrado na Fig.~\ref{fig1}.
+
+\begin{figure}
+  \centering
+  \includegraphics{R}
+  \caption{Tempo de execução normalizado $T_o/(0.6n^2+n)\log n$ do algoritmo de Dijkstra para um grafo com
+    $n=2^i$, $i=2,\ldots,12$ vértices é $\approx 0.6n^2$ arestas.}
+  \label{fig1}
+\end{figure}
+
+\begin{shaded}
+  Dicas para figuras:
+  \begin{itemize}
+  \item Rotular os eixos.
+  \end{itemize}
+
+\end{shaded}
+
+\section{Conclusão}
+
+O algoritmo X comporta-se como esperado nos intervalos A e B e um melhor desempenho para valores C e D. Isso
+pode ser explicado por Y.
+
+\begin{shaded}
+  Muito mais dicas: \textcite{Johnson/2002}.
+\end{shaded}
+
+\printbibliography
+
+\end{document}
+% Local Variables:
+% auto-fill-function: do-auto-fill
+% TeX-PDF-mode: t
+% fill-column: 110
+% ispell-local-dictionary: "brasileiro"
+% mode-name: "LaTeX"
+% End:
