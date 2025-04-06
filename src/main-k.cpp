@@ -19,6 +19,9 @@ int Dijkstra::delete_min_operations = 0;
 int Dijkstra::update_operations = 0;
 int MinHeap::sift_up_operations = 0;
 int MinHeap::sift_down_operations = 0;
+int MinHeap::insert_sifts = 0;
+int MinHeap::extract_sifts = 0;
+int MinHeap::update_sifts = 0;
 
 double log_k(double base, double value) {
     return log(value) / log(base);
@@ -38,11 +41,9 @@ void runBasicTests(const string filename, const vector<int>& ks, int count) {
     cout << "Grafo criado com sucesso." << endl;
 
     ofstream out_results("../output/k/resultados_por_par_" + std::to_string(count) + ".csv");
-    ofstream out_stats("../output/k/estatisticas_" + std::to_string(count) + ".csv");
 
     // Cabeçalhos dos arquivos CSV
     out_results << "k,s,t,dist,insert,deleteMin,update";
-    out_stats << "k,n,m,avg_insert,avg_deleteMin,avg_update,avg_time_ms";
 
     int n = g.getNumVertices();
     int m = g.getNumEdges();
@@ -91,18 +92,10 @@ void runBasicTests(const string filename, const vector<int>& ks, int count) {
                         << duration << "\n";
         }
 
-        out_stats << k << ","
-                  << n << ","
-                  << m << ","
-                  << total_insert / NUM_PAIRS << ","
-                  << total_delete / NUM_PAIRS << ","
-                  << total_update / NUM_PAIRS << ","
-                  << total_time / NUM_PAIRS << "\n";
 
         cout << "k=" << k << " concluído." << endl;
     }
-
-    out_stats.close();
+    
     out_results.close();
     cout << "Arquivos gerados com sucesso.\n";
 }
@@ -301,7 +294,7 @@ int main() {
             cerr << "Erro ao abrir o arquivo: " << file << endl;
             continue;
         }
-        vector<int> ks = {10};
+        vector<int> ks = {16};
 
         runFullTests(file, ks, count);
         count++;

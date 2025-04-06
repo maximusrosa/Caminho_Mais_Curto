@@ -27,14 +27,14 @@ class Dijkstra {
                 auto [u, uDist] = minHeap.extractMin(); 
                 delete_min_operations++;
 
-                if (uDist > dist[u]) throw;
+                if (uDist > dist[u]) throw runtime_error("uDist > dist[u]");
     
                 for (const auto& [v, weight] : g.getAdjList(u)) {
                     if (dist[v] > uDist + weight) {
                         dist[v] = uDist + weight;
                     
                         if (minHeap.contains(v)) {  // Se já está no heap, atualize a chave.
-                            minHeap.decreaseKey(dist[v], v); 
+                            minHeap.decreaseKey(v, dist[v]); 
                             update_operations++;
                         } else { 
                             minHeap.insert(v, dist[v]); // Caso contrário, insira no heap.

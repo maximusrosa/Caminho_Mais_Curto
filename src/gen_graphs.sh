@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Output directories
-OUTPUT_DIR="input"
+OUTPUT_DIR="../input"
 DIMACS_DIR="$OUTPUT_DIR/random"
 mkdir -p "$DIMACS_DIR"
 
