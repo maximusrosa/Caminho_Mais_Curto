@@ -3,7 +3,6 @@
 #include <sstream>
 #include <string>
 #include <limits>
-#include "min_heap.hpp"
 #define INF numeric_limits<int>::max()
 #define MAX_WEIGHT 1000
 using namespace std;
@@ -75,8 +74,6 @@ public:
     }
 
     void printGraph() {
-        cout << "Oi" << endl;
-
         for (int i = 0; i < numVertices; i++) {
             cout << "Vertex " << i + 1 << " -> ";
             for (const auto& [v, w] : adjVector[i]) {
