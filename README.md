@@ -1,3 +1,3 @@
 # Caminho Mais Curto
  
- Código e dados de suporte para o trabalho prático no problema do caminho mais curto.
+ Trabalho Prático 1: Caminho mais curto.
