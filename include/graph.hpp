@@ -3,18 +3,19 @@
 #include <sstream>
 #include <string>
 #include <limits>
-#include "min_heap.hpp"
 #define INF numeric_limits<int>::max()
+#define MAX_WEIGHT 1000
 using namespace std;
 
 class Graph {
 private:
     int numVertices;
+    int numEdges; // Number of edges in the graph
     vector<vector<pair<int, int>>> adjVector; // Adjacency list {neighbor, weight}
 
 public:
     // Default constructor
-    Graph(int v) : numVertices(v), adjVector(v) {}
+    Graph(int v) : numVertices(v), numEdges(0), adjVector(v) {}
 
     /* Constructors based on code by Marcus Ritt */
     /*          <mrpritt@inf.ufrgs.br>          */
@@ -33,6 +34,7 @@ public:
 
         numVertices = n;
         adjVector.resize(n);
+        numEdges = m;
 
         // Read edges
         for (unsigned i = 0; i < m; i++) {
@@ -49,13 +51,16 @@ public:
     }
 
     // Random graph constructor
-    Graph (unsigned n, double p, int maxWeight) {
-        srand(time(nullptr)); // Seed for random numbers
-
+    Graph (unsigned n, float p) {
+        numVertices = n;
+        adjVector.resize(n);
+        numEdges = 0;
+    
         for (unsigned i = 0; i < n; i++) {
             for (unsigned j = 0; j < n; j++) {
-                if (i != j && (rand() / (double)RAND_MAX) < p) {
-                    addEdge(i, j, rand() % maxWeight + 1); // Weight in the range [1, maxWeight]
+                if (i != j && (drand48() < p)) {
+                    addEdge(i, j, lrand48() % MAX_WEIGHT); // Weight in the range [1, maxWeight]
+                    numEdges++;
                 }
             }
         }
@@ -80,6 +85,10 @@ public:
 
     const int getNumVertices() const {
         return numVertices;
+    }
+
+    const int getNumEdges() const {
+        return numEdges;
     }
 
     const vector<pair<int, int>> &getAdjList(int u) const {
